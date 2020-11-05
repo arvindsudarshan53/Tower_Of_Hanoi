@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
   layers:
   - Default
   - TransparentFX
@@ -13,8 +20,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Rod
+  - Disc
   - 
   - 
   - 
