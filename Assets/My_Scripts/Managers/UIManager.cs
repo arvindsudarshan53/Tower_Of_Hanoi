@@ -17,6 +17,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject setupMenu;
     [Header("In Game UI")]
     [SerializeField] GameObject inGameUI;
+    [SerializeField] TextMeshProUGUI noOfMovesDispText;
+    [SerializeField] GameObject undoButton;
 
     GameManager gameManager;
 
@@ -36,7 +38,7 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        DisplayNoOfMoves();
     }
 
     public void ShowDiscIndicator(bool canShow, string towerName)
@@ -70,5 +72,15 @@ public class UIManager : MonoBehaviour
     public void ShowInGameUI(bool canShow)
     {
         inGameUI.SetActive(canShow);
+    }
+
+    public void ShowUndoButton(bool canShow)
+    {
+        undoButton.SetActive(canShow);
+    }
+
+    void DisplayNoOfMoves()
+    {
+        noOfMovesDispText.text = "Moves : " + gameManager.noOfMoves;
     }
 }

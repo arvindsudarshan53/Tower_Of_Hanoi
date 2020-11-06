@@ -10,11 +10,13 @@ public class GameManager : MonoBehaviour
     GameObject[] discGameObjs;
 
     UIManager uiManager;
+    UndoManager undoManager;
 
-    public int chosenNoOfDiscs = 7;
+    [HideInInspector] public int chosenNoOfDiscs = 7;
+    [HideInInspector] public bool isPlaying = false;
+    [HideInInspector] public int noOfMoves = 0;
 
     public TowerContentOrganizer towerAContentOrganizer, towerBContentOrganizer, towerCContentOrganizer;
-    public bool isPlaying = false;
 
 
 
@@ -27,6 +29,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         uiManager = UIManager.instance;
+        undoManager = UndoManager.instance;
+
         uiManager.ShowSetupMenu(true);
         uiManager.ShowInGameUI(false);
     }
@@ -38,6 +42,8 @@ public class GameManager : MonoBehaviour
         SetupDiscs();
         uiManager.ShowSetupMenu(false);
         uiManager.ShowInGameUI(true);
+        noOfMoves = 0;
+        undoManager.ClearAllUndoMoves();
         isPlaying = true;
     }
 
@@ -46,6 +52,9 @@ public class GameManager : MonoBehaviour
         ClearAllProgress();
         SetInitPositionsOfDiscs();
         SetupDiscs();
+        uiManager.ShowDiscIndicator(false,"");
+        undoManager.ClearAllUndoMoves();
+        noOfMoves = 0;
     }
 
     public void BackToMenu()
@@ -55,6 +64,7 @@ public class GameManager : MonoBehaviour
         ClearAllProgress();
         SetInitPositionsOfDiscs();
         isPlaying = false;
+        uiManager.ShowDiscIndicator(false, "");
     }
 
     void ClearAllProgress()

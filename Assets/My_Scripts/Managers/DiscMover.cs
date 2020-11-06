@@ -23,6 +23,7 @@ public class DiscMover : MonoBehaviour
     int[] moveTargetsTowerIndex = new int[2] { 0, 2 };
     GameManager gameManager;
     UIManager uiManager;
+    UndoManager undoManager;
 
     private void Awake()
     {
@@ -34,7 +35,9 @@ public class DiscMover : MonoBehaviour
     {
         
         gameManager = GameManager.instance;
-        uiManager = UIManager.instance;
+        uiManager   = UIManager.instance;
+        undoManager = UndoManager.instance;
+
         //chosenDiscRigidBody.isKinematic = true;
         //chosenDiscRigidBody.useGravity = false;
     }
@@ -46,8 +49,6 @@ public class DiscMover : MonoBehaviour
             return;
         if(canMove)
         {
-            //moveFromTowerIndex = "Tower_A";
-            //moveToTowerIndex = "Tower_C";
             SetMoveTargetsTowerIndex();
             MoveDisc(discToMove);
         }
@@ -138,10 +139,25 @@ public class DiscMover : MonoBehaviour
             {
                 index = 0;
                 canMove = false;
+                chosenDiscRigidBody = discToMove.GetComponent<Rigidbody>();
                 chosenDiscRigidBody.isKinematic = false;
                 chosenDiscRigidBody.useGravity = true;
+                if(!undoManager.isUndoing)
+                {
+                    string movesEncodeToStr = discToMove.name +","+moveFromTowerIndex + "," + moveToTowerIndex;
+                    undoManager.AddThisMove(movesEncodeToStr);
+                    gameManager.noOfMoves++;
+                }
+                else // When Undo is done add discs to respective towers
+                {
+
+                    OrganizeTowers(); 
+                }
                 moveFromTowerIndex = "";
                 moveToTowerIndex = "";
+                
+                undoManager.isUndoing = false;
+                uiManager.ShowUndoButton(true);
             }
             else
             {
@@ -212,6 +228,23 @@ public class DiscMover : MonoBehaviour
         moveFromTowerIndex = "";
         moveToTowerIndex = "";
         canMove = false;
+    }
+
+
+    public void UndoTheMove(string undoEncodedMove)
+    {
+        string[] decodedUndoMove = undoEncodedMove.Split(',');
+
+        moveFromTowerIndex = decodedUndoMove[2];
+        moveToTowerIndex = decodedUndoMove[1];
+        discToMove = GameObject.Find(decodedUndoMove[0]).transform;
+        Rigidbody discToMoveRigidBody = discToMove.GetComponent<Rigidbody>();
+        discToMoveRigidBody.isKinematic = true;
+        discToMoveRigidBody.useGravity = false;
+        //index = 0;
+        //SetMoveTargetsTowerIndex();
+        canMove = true;
+        //MoveDisc(GameObject.Find(decodedUndoMove[0]).transform);
     }
 
 }
