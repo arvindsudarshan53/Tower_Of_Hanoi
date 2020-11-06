@@ -48,7 +48,7 @@ public class DiscMover : MonoBehaviour
         PlayerInput();
     }
 
-
+    int obtainedDiscSize;
     void PlayerInput()
     {
         if (Input.GetMouseButtonDown(0))
@@ -62,23 +62,45 @@ public class DiscMover : MonoBehaviour
             if (Physics.Raycast(ray, out hit, distance, layer_mask))
             {
                 
-                string hitObjName = hit.collider.transform.root.name;
-                Transform obtainedDiscToMove = GetTopDiscFromTower(hitObjName);
+                string chosenTowerName = hit.collider.transform.root.name; // Gets the Tower selection
+                Transform obtainedDiscToMove = GetTopDiscFromTower(chosenTowerName);
+                
                 //print(hit.collider.name);
                 if (moveFromTowerIndex == "" && obtainedDiscToMove != null)
                 {
-                    moveFromTowerIndex = hitObjName;
+                    obtainedDiscSize = GetDiscSize(chosenTowerName, obtainedDiscToMove); // Gets the size of chosen disc to move
+                    moveFromTowerIndex = chosenTowerName;
                     discToMove = obtainedDiscToMove;
                     chosenDiscRigidBody = discToMove.GetComponent<Rigidbody>();
                 }
 
-                if(moveFromTowerIndex != "" && moveFromTowerIndex != hitObjName)
+                if(moveFromTowerIndex != ""
+                    && moveFromTowerIndex != chosenTowerName)
                 {
-                    moveToTowerIndex = hitObjName;
-                    canMove = true;
-                    chosenDiscRigidBody.isKinematic = true;
-                    chosenDiscRigidBody.useGravity = false;
-                    OrganizeTowers();
+                    Transform topDiscFromDestTower = GetTopDiscFromTower(chosenTowerName);
+                    if(topDiscFromDestTower == null) // When Destination Tower is Empty
+                    {
+                        moveToTowerIndex = chosenTowerName;
+                        canMove = true;
+                        chosenDiscRigidBody.isKinematic = true;
+                        chosenDiscRigidBody.useGravity = false;
+                        OrganizeTowers();
+                        return;
+                    }
+                    else if (obtainedDiscSize < GetDiscSize(chosenTowerName, topDiscFromDestTower)) // When Destination tower has discs and compares sizes of discs
+                    {
+                        moveToTowerIndex = chosenTowerName;
+                        canMove = true;
+                        chosenDiscRigidBody.isKinematic = true;
+                        chosenDiscRigidBody.useGravity = false;
+                        OrganizeTowers();
+                        return;
+                    }
+                    else if(obtainedDiscSize > GetDiscSize(chosenTowerName, topDiscFromDestTower))
+                    {
+                        moveFromTowerIndex = "";
+                        return;
+                    }
                 }
             }
         }
@@ -147,14 +169,25 @@ public class DiscMover : MonoBehaviour
 
     Transform GetTopDiscFromTower(string towerName)
     {
-        if (towerName == "Tower_A" && gameManager.towerAContentOrganizer.thisTowerDiscs.Count > 0)
-            return gameManager.towerAContentOrganizer.thisTowerDiscs[0];
-        else if (towerName == "Tower_B" && gameManager.towerBContentOrganizer.thisTowerDiscs.Count > 0)
-            return gameManager.towerBContentOrganizer.thisTowerDiscs[0];
-        else if (towerName == "Tower_C" && gameManager.towerCContentOrganizer.thisTowerDiscs.Count > 0)
-            return gameManager.towerCContentOrganizer.thisTowerDiscs[0];
+        if (towerName == "Tower_A")
+            return gameManager.towerAContentOrganizer.GetTopDisc();
+        else if (towerName == "Tower_B")
+            return gameManager.towerBContentOrganizer.GetTopDisc();
+        else if (towerName == "Tower_C")
+            return gameManager.towerCContentOrganizer.GetTopDisc();
 
         return null;
+    }
+
+    int GetDiscSize(string towerName, Transform thisDisc)
+    {
+        if (towerName == "Tower_A")
+            return gameManager.towerAContentOrganizer.GetDiscSize(thisDisc);
+        else if (towerName == "Tower_B")
+            return gameManager.towerBContentOrganizer.GetDiscSize(thisDisc);
+        else if (towerName == "Tower_C")
+            return gameManager.towerCContentOrganizer.GetDiscSize(thisDisc);
+        return 0;
     }
 
 }

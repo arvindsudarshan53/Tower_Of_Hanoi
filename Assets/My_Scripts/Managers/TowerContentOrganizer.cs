@@ -16,4 +16,17 @@ public class TowerContentOrganizer : MonoBehaviour
     {
         thisTowerDiscs.Remove(thisDisc);
     }
+
+    public Transform GetTopDisc()
+    {
+        if (thisTowerDiscs.Count > 0)
+            return thisTowerDiscs[0];
+        else
+            return null;
+    }
+
+    public int GetDiscSize(Transform thisDisc)
+    {
+        return thisDisc.GetComponent<DiscProps>().discSize;
+    }
 }
