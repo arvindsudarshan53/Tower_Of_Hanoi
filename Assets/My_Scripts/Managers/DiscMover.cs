@@ -20,13 +20,15 @@ public class DiscMover : MonoBehaviour
     string moveFromTowerIndex, moveToTowerIndex;
 
     int[] moveTargetsTowerIndex = new int[2] { 0, 2 };
-    private GameManager gameManager;
+    GameManager gameManager;
+    UIManager uiManager;
 
     // Start is called before the first frame update
     void Start()
     {
         
         gameManager = GameManager.instance;
+        uiManager = UIManager.instance;
         //chosenDiscRigidBody.isKinematic = true;
         //chosenDiscRigidBody.useGravity = false;
     }
@@ -68,6 +70,7 @@ public class DiscMover : MonoBehaviour
                 //print(hit.collider.name);
                 if (moveFromTowerIndex == "" && obtainedDiscToMove != null)
                 {
+                    uiManager.ShowDiscIndicator(true, chosenTowerName);
                     obtainedDiscSize = GetDiscSize(chosenTowerName, obtainedDiscToMove); // Gets the size of chosen disc to move
                     moveFromTowerIndex = chosenTowerName;
                     discToMove = obtainedDiscToMove;
@@ -80,6 +83,7 @@ public class DiscMover : MonoBehaviour
                     Transform topDiscFromDestTower = GetTopDiscFromTower(chosenTowerName);
                     if(topDiscFromDestTower == null) // When Destination Tower is Empty
                     {
+                        uiManager.ShowDiscIndicator(false,"");
                         moveToTowerIndex = chosenTowerName;
                         canMove = true;
                         chosenDiscRigidBody.isKinematic = true;
@@ -89,6 +93,7 @@ public class DiscMover : MonoBehaviour
                     }
                     else if (obtainedDiscSize < GetDiscSize(chosenTowerName, topDiscFromDestTower)) // When Destination tower has discs and compares sizes of discs
                     {
+                        uiManager.ShowDiscIndicator(false,"");
                         moveToTowerIndex = chosenTowerName;
                         canMove = true;
                         chosenDiscRigidBody.isKinematic = true;
@@ -99,6 +104,8 @@ public class DiscMover : MonoBehaviour
                     else if(obtainedDiscSize > GetDiscSize(chosenTowerName, topDiscFromDestTower))
                     {
                         moveFromTowerIndex = "";
+                        uiManager.ShowDiscIndicator(false,"");
+                        uiManager.ShowWrongMoveText();
                         return;
                     }
                 }
@@ -107,7 +114,7 @@ public class DiscMover : MonoBehaviour
     }
 
     int index = 0;
-    float distBtwDiscAndTarget;
+   
     private void MoveDisc(Transform thisDisc)
     {
 
