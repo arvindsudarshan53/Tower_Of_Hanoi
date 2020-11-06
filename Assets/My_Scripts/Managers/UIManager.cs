@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,6 +11,12 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] Transform discIndicator;
     [SerializeField] Animation wrongMoveTextAnim;
+    [Header("Setup Menu")]
+    [SerializeField] Slider noOfDiscSlider;
+    [SerializeField] TextMeshProUGUI noOfDiscValDisp;
+    [SerializeField] GameObject setupMenu;
+    [Header("In Game UI")]
+    [SerializeField] GameObject inGameUI;
 
     GameManager gameManager;
 
@@ -22,6 +30,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.instance;
+        UpdateNoOfDisc();
     }
 
     // Update is called once per frame
@@ -44,5 +53,22 @@ public class UIManager : MonoBehaviour
     public void ShowWrongMoveText()
     {
         wrongMoveTextAnim.Play();
+    }
+
+    public void UpdateNoOfDisc()
+    {
+        int chosenDiscsNos = (int)noOfDiscSlider.value;
+        noOfDiscValDisp.text = chosenDiscsNos.ToString();
+        gameManager.chosenNoOfDiscs = chosenDiscsNos;
+    }
+
+    public void ShowSetupMenu(bool canShow)
+    {
+        setupMenu.SetActive(canShow);
+    }
+
+    public void ShowInGameUI(bool canShow)
+    {
+        inGameUI.SetActive(canShow);
     }
 }

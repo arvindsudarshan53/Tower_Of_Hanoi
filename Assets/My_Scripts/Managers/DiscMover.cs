@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DiscMover : MonoBehaviour
 {
+    public static DiscMover instance;
 
     [SerializeField]
     Transform[] towerPositions;
@@ -23,6 +24,11 @@ public class DiscMover : MonoBehaviour
     GameManager gameManager;
     UIManager uiManager;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +42,8 @@ public class DiscMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!gameManager.isPlaying)
+            return;
         if(canMove)
         {
             //moveFromTowerIndex = "Tower_A";
@@ -47,6 +55,8 @@ public class DiscMover : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!gameManager.isPlaying)
+            return;
         PlayerInput();
     }
 
@@ -195,6 +205,13 @@ public class DiscMover : MonoBehaviour
         else if (towerName == "Tower_C")
             return gameManager.towerCContentOrganizer.GetDiscSize(thisDisc);
         return 0;
+    }
+
+    public void ClearTempData()
+    {
+        moveFromTowerIndex = "";
+        moveToTowerIndex = "";
+        canMove = false;
     }
 
 }

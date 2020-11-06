@@ -9,10 +9,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject[] discGameObjs;
 
-    [SerializeField]
-    int chosenNoOfDiscs = 7;
+    UIManager uiManager;
+
+    public int chosenNoOfDiscs = 7;
 
     public TowerContentOrganizer towerAContentOrganizer, towerBContentOrganizer, towerCContentOrganizer;
+    public bool isPlaying = false;
+
+
 
     private void Awake()
     {
@@ -22,14 +26,43 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        uiManager = UIManager.instance;
+        uiManager.ShowSetupMenu(true);
+        uiManager.ShowInGameUI(false);
+    }
+
+
+    public void StartTheGame()
+    {
         ClampChosenNoOfDiscs();
+        SetupDiscs();
+        uiManager.ShowSetupMenu(false);
+        uiManager.ShowInGameUI(true);
+        isPlaying = true;
+    }
+
+    public void RestartTheGame()
+    {
+        ClearAllProgress();
+        SetInitPositionsOfDiscs();
         SetupDiscs();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void BackToMenu()
     {
-        
+        uiManager.ShowSetupMenu(true);
+        uiManager.ShowInGameUI(false);
+        ClearAllProgress();
+        SetInitPositionsOfDiscs();
+        isPlaying = false;
+    }
+
+    void ClearAllProgress()
+    {
+        towerAContentOrganizer.ClearTempData();
+        towerBContentOrganizer.ClearTempData();
+        towerCContentOrganizer.ClearTempData();
+        DiscMover.instance.ClearTempData();
     }
 
     void SetupDiscs()
@@ -52,5 +85,15 @@ public class GameManager : MonoBehaviour
     void ClampChosenNoOfDiscs()
     {
         chosenNoOfDiscs = Mathf.Clamp(chosenNoOfDiscs, 1, 7);
+    }
+
+    void SetInitPositionsOfDiscs()
+    {
+        foreach(GameObject g in discGameObjs)
+        {
+            g.transform.position = g.GetComponent<DiscProps>().initPos;
+            g.GetComponent<Rigidbody>().isKinematic = false;
+            g.GetComponent<Rigidbody>().useGravity = true;
+        }
     }
 }

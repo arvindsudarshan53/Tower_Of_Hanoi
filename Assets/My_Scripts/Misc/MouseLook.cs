@@ -15,8 +15,20 @@ public class MouseLook : MonoBehaviour
     float rotationX = 0f;
     float rotationY = 0f;
     Quaternion originalRotation;
+
+    GameManager gameManager;
+
+    void Start()
+    {
+        gameManager = GameManager.instance;
+        originalRotation = transform.localRotation;
+        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = true;
+    }
     void Update()
     {
+        if (!gameManager.isPlaying)
+            return;
         if (axes == RotationAxes.MouseXAndY)
         {
             // Read the mouse input axis
@@ -43,12 +55,7 @@ public class MouseLook : MonoBehaviour
             transform.localRotation = originalRotation * yQuaternion;
         }
     }
-    void Start()
-    {
-        originalRotation = transform.localRotation;
-        //Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
-    }
+
     public static float ClampAngle(float angle, float min, float max)
     {
         if (angle < -360f)

@@ -29,4 +29,9 @@ public class TowerContentOrganizer : MonoBehaviour
     {
         return thisDisc.GetComponent<DiscProps>().discSize;
     }
+
+    public void ClearTempData()
+    {
+        thisTowerDiscs.Clear();
+    }
 }
