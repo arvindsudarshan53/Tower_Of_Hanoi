@@ -6,15 +6,17 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [SerializeField]
-    GameObject[] discGameObjs;
-
-    UIManager uiManager;
-    UndoManager undoManager;
-
     [HideInInspector] public int chosenNoOfDiscs = 7;
     [HideInInspector] public bool isPlaying = false;
     [HideInInspector] public int noOfMoves = 0;
+    public bool isAutoModeOn = false;
+
+    [SerializeField] GameObject[] discGameObjs;
+
+    UIManager uiManager;
+    UndoManager undoManager;
+    AutoModeManager autoModeManager;
+
 
     public TowerContentOrganizer towerAContentOrganizer, towerBContentOrganizer, towerCContentOrganizer;
 
@@ -28,9 +30,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uiManager = UIManager.instance;
-        undoManager = UndoManager.instance;
-
+        uiManager       = UIManager.instance;
+        undoManager     = UndoManager.instance;
+        autoModeManager = AutoModeManager.instance;
         uiManager.ShowSetupMenu(true);
         uiManager.ShowInGameUI(false);
     }
@@ -45,6 +47,8 @@ public class GameManager : MonoBehaviour
         noOfMoves = 0;
         undoManager.ClearAllUndoMoves();
         isPlaying = true;
+        CheckForAutoModeAndExecute();
+
     }
 
     public void RestartTheGame()
@@ -55,6 +59,27 @@ public class GameManager : MonoBehaviour
         uiManager.ShowDiscIndicator(false,"");
         undoManager.ClearAllUndoMoves();
         noOfMoves = 0;
+        isPlaying = true;
+        CheckForAutoModeAndExecute();
+    }
+
+    public bool CheckForWin()
+    {
+        if (towerCContentOrganizer.thisTowerDiscs.Count == chosenNoOfDiscs)
+            return true;
+        else
+            return false;
+    }
+
+    void CheckForAutoModeAndExecute()
+    {
+        if (isAutoModeOn)
+        {
+            autoModeManager.ClearAllAutoModeData();
+            autoModeManager.SolvePuzzle(); // Gets the steps to solve the puzzle
+            autoModeManager.FetchAutoModeMove(); // Fetches first AutoMode move
+            uiManager.ShowUndoButton(false);
+        }
     }
 
     public void BackToMenu()

@@ -21,9 +21,10 @@ public class DiscMover : MonoBehaviour
     string moveFromTowerIndex, moveToTowerIndex;
 
     int[] moveTargetsTowerIndex = new int[2] { 0, 2 };
-    GameManager gameManager;
-    UIManager uiManager;
-    UndoManager undoManager;
+    GameManager     gameManager;
+    UIManager       uiManager;
+    UndoManager     undoManager;
+    AutoModeManager autoModeManager;
 
     private void Awake()
     {
@@ -34,10 +35,10 @@ public class DiscMover : MonoBehaviour
     void Start()
     {
         
-        gameManager = GameManager.instance;
-        uiManager   = UIManager.instance;
-        undoManager = UndoManager.instance;
-
+        gameManager     = GameManager.instance;
+        uiManager       = UIManager.instance;
+        undoManager     = UndoManager.instance;
+        autoModeManager = AutoModeManager.instance;
         //chosenDiscRigidBody.isKinematic = true;
         //chosenDiscRigidBody.useGravity = false;
     }
@@ -47,7 +48,7 @@ public class DiscMover : MonoBehaviour
     {
         if (!gameManager.isPlaying)
             return;
-        if(canMove)
+        if(canMove && discToMove != null)
         {
             SetMoveTargetsTowerIndex();
             MoveDisc(discToMove);
@@ -56,7 +57,7 @@ public class DiscMover : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!gameManager.isPlaying)
+        if (!gameManager.isPlaying || gameManager.isAutoModeOn)
             return;
         PlayerInput();
     }
@@ -153,17 +154,37 @@ public class DiscMover : MonoBehaviour
 
                     OrganizeTowers(); 
                 }
+                if(gameManager.isAutoModeOn)
+                {
+                    OrganizeTowers();
+                    Invoke("GetNextAutoMove",1);
+                }
                 moveFromTowerIndex = "";
                 moveToTowerIndex = "";
-                
                 undoManager.isUndoing = false;
-                uiManager.ShowUndoButton(true);
+                if(undoManager.listOfMoves.Count > 0 && !gameManager.isAutoModeOn)
+                    uiManager.ShowUndoButton(true);
+
+                if(gameManager.CheckForWin())
+                {
+                    if (gameManager.isAutoModeOn)
+                        uiManager.ShowSolvedText();
+                    else
+                        uiManager.ShowYouWonText();
+                    gameManager.isPlaying = false;
+                }
             }
             else
             {
                 index++;
             }
         }
+    }
+
+    void GetNextAutoMove()
+    {
+        if (autoModeManager.currentAutoMoveIndex < autoModeManager.autoSolveSteps.Count)
+            autoModeManager.FetchAutoModeMove(); // Fetches Next AutoMode move
     }
 
     private void SetMoveTargetsTowerIndex()
@@ -245,6 +266,23 @@ public class DiscMover : MonoBehaviour
         //SetMoveTargetsTowerIndex();
         canMove = true;
         //MoveDisc(GameObject.Find(decodedUndoMove[0]).transform);
+    }
+
+    public void ExecuteThisAutoModeMove(string obtainedAutoModeMove)
+    {
+        print(obtainedAutoModeMove);
+        string[] decodedMove = obtainedAutoModeMove.Split(',');
+        moveFromTowerIndex = decodedMove[0];
+        moveToTowerIndex = decodedMove[1];
+        discToMove = GetTopDiscFromTower(moveFromTowerIndex);
+        if(discToMove != null)
+        {
+            Rigidbody discToMoveRigidBody = discToMove.GetComponent<Rigidbody>();
+            discToMoveRigidBody.isKinematic = true;
+            discToMoveRigidBody.useGravity = false;
+
+        }
+        canMove = true;
     }
 
 }

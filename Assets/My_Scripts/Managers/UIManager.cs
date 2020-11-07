@@ -9,16 +9,21 @@ public class UIManager : MonoBehaviour
 
     public static UIManager instance;
 
-    [SerializeField] Transform discIndicator;
-    [SerializeField] Animation wrongMoveTextAnim;
+
     [Header("Setup Menu")]
     [SerializeField] Slider noOfDiscSlider;
     [SerializeField] TextMeshProUGUI noOfDiscValDisp;
     [SerializeField] GameObject setupMenu;
+    [SerializeField] Toggle autoModeToggle;
+
     [Header("In Game UI")]
     [SerializeField] GameObject inGameUI;
     [SerializeField] TextMeshProUGUI noOfMovesDispText;
     [SerializeField] GameObject undoButton;
+    [SerializeField] Transform discIndicator;
+    [SerializeField] Animation wrongMoveTextAnim;
+    [SerializeField] Animation youWonTextAnim;
+    [SerializeField] Animation solvedTextAnim;
 
     GameManager gameManager;
 
@@ -57,6 +62,16 @@ public class UIManager : MonoBehaviour
         wrongMoveTextAnim.Play();
     }
 
+    public void ShowYouWonText()
+    {
+        youWonTextAnim.Play();
+    }
+
+    public void ShowSolvedText()
+    {
+        solvedTextAnim.Play();
+    }
+
     public void UpdateNoOfDisc()
     {
         int chosenDiscsNos = (int)noOfDiscSlider.value;
@@ -77,6 +92,11 @@ public class UIManager : MonoBehaviour
     public void ShowUndoButton(bool canShow)
     {
         undoButton.SetActive(canShow);
+    }
+
+    public void UpdateAutoModeBool()
+    {
+        gameManager.isAutoModeOn = autoModeToggle.isOn;
     }
 
     void DisplayNoOfMoves()

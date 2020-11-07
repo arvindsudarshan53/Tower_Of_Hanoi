@@ -34,5 +34,6 @@ public class UndoManager : MonoBehaviour
             DiscMover.instance.UndoTheMove(lastMoveStr);
             listOfMoves.RemoveAt(listOfMoves.Count-1);
         }
+
     }
 }
