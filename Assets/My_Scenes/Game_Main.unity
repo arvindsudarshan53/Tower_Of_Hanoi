@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discSize: 7
+  sizeDispText: {fileID: 271538613}
   initPos: {x: 0, y: 0, z: 0}
 --- !u!54 &22573036
 Rigidbody:
@@ -4079,6 +4080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discSize: 1
+  sizeDispText: {fileID: 1396559023}
   initPos: {x: 0, y: 0, z: 0}
 --- !u!1 &942716459
 GameObject:
@@ -4258,6 +4260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discSize: 4
+  sizeDispText: {fileID: 980955429}
   initPos: {x: 0, y: 0, z: 0}
 --- !u!4 &956994964 stripped
 Transform:
@@ -5308,6 +5311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discSize: 2
+  sizeDispText: {fileID: 1928308311}
   initPos: {x: 0, y: 0, z: 0}
 --- !u!4 &1378068017 stripped
 Transform:
@@ -5958,6 +5962,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discSize: 3
+  sizeDispText: {fileID: 1413716489}
   initPos: {x: 0, y: 0, z: 0}
 --- !u!4 &1497540977 stripped
 Transform:
@@ -6087,6 +6092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discSize: 5
+  sizeDispText: {fileID: 440079409}
   initPos: {x: 0, y: 0, z: 0}
 --- !u!4 &1575760807 stripped
 Transform:
@@ -7858,6 +7864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   discSize: 6
+  sizeDispText: {fileID: 181816652}
   initPos: {x: 0, y: 0, z: 0}
 --- !u!4 &2093055049 stripped
 Transform:

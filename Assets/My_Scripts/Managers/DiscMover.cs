@@ -270,7 +270,7 @@ public class DiscMover : MonoBehaviour
 
     public void ExecuteThisAutoModeMove(string obtainedAutoModeMove)
     {
-        print(obtainedAutoModeMove);
+        //print(obtainedAutoModeMove);
         string[] decodedMove = obtainedAutoModeMove.Split(',');
         moveFromTowerIndex = decodedMove[0];
         moveToTowerIndex = decodedMove[1];

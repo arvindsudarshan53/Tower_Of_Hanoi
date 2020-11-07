@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
 
     public void StartTheGame()
     {
+        ClearAllProgress();
+        SetInitPositionsOfDiscs();
         ClampChosenNoOfDiscs();
         SetupDiscs();
         uiManager.ShowSetupMenu(false);
@@ -107,6 +109,7 @@ public class GameManager : MonoBehaviour
             if(currentIndex < chosenNoOfDiscs)
             {
                 discGameObjs[currentIndex].SetActive(true);
+                discGameObjs[currentIndex].GetComponent<DiscProps>().sizeDispText.text = (chosenNoOfDiscs-(currentIndex)).ToString(); // to display size
                 towerAContentOrganizer.AddThisDisc(discGameObjs[currentIndex].transform);
 
             }

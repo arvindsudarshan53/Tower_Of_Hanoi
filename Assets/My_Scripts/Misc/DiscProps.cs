@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class DiscProps : MonoBehaviour
 {
 
     public int discSize;
+    public TextMeshProUGUI sizeDispText;
 
-    public Vector3 initPos;
+    [HideInInspector] public Vector3 initPos;
 
     private void Awake()
     {
