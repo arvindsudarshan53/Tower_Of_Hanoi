@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int chosenNoOfDiscs = 7;
     [HideInInspector] public bool isPlaying = false;
     [HideInInspector] public int noOfMoves = 0;
+    public int bestMovesCount;
     public bool isAutoModeOn = false;
 
     [SerializeField] GameObject[] discGameObjs;
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
         undoManager.ClearAllUndoMoves();
         isPlaying = true;
         CheckForAutoModeAndExecute();
-
+        GetBestMoveCount();
     }
 
     public void RestartTheGame()
@@ -133,5 +134,10 @@ public class GameManager : MonoBehaviour
             g.GetComponent<Rigidbody>().isKinematic = false;
             g.GetComponent<Rigidbody>().useGravity = true;
         }
+    }
+
+    void GetBestMoveCount()
+    {
+        bestMovesCount = (int)(Mathf.Pow(2, chosenNoOfDiscs)) - 1;
     }
 }

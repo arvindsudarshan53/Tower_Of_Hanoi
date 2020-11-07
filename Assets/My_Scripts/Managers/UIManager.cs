@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
 
     [Header("In Game UI")]
     [SerializeField] GameObject inGameUI;
-    [SerializeField] TextMeshProUGUI noOfMovesDispText;
+    [SerializeField] TextMeshProUGUI noOfMovesDispText, bestMovesDispText;
     [SerializeField] GameObject undoButton;
     [SerializeField] Transform discIndicator;
     [SerializeField] Animation wrongMoveTextAnim;
@@ -38,6 +38,7 @@ public class UIManager : MonoBehaviour
     {
         gameManager = GameManager.instance;
         UpdateNoOfDisc();
+        
     }
 
     // Update is called once per frame
@@ -102,5 +103,8 @@ public class UIManager : MonoBehaviour
     void DisplayNoOfMoves()
     {
         noOfMovesDispText.text = "Moves : " + gameManager.noOfMoves;
+        bestMovesDispText.text = "Best Moves : " + gameManager.bestMovesCount;
     }
+
+
 }

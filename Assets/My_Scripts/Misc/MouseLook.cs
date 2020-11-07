@@ -23,7 +23,7 @@ public class MouseLook : MonoBehaviour
         gameManager = GameManager.instance;
         originalRotation = transform.localRotation;
         //Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        //Cursor.visible = true;
     }
     void Update()
     {
