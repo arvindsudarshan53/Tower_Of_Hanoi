@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UndoManager : MonoBehaviour
+public class UndoManager : MonoBehaviour // Handles Undo functionality
 {
     public static UndoManager instance;
 

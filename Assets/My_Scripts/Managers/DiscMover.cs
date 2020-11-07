@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DiscMover : MonoBehaviour
+public class DiscMover : MonoBehaviour // Handles Disc movement
 {
     public static DiscMover instance;
 
@@ -39,8 +39,7 @@ public class DiscMover : MonoBehaviour
         uiManager       = UIManager.instance;
         undoManager     = UndoManager.instance;
         autoModeManager = AutoModeManager.instance;
-        //chosenDiscRigidBody.isKinematic = true;
-        //chosenDiscRigidBody.useGravity = false;
+
     }
 
     // Update is called once per frame
@@ -80,7 +79,7 @@ public class DiscMover : MonoBehaviour
                 Transform obtainedDiscToMove = GetTopDiscFromTower(chosenTowerName);
                 
                 //print(hit.collider.name);
-                if (moveFromTowerIndex == "" && obtainedDiscToMove != null)
+                if (moveFromTowerIndex == "" && obtainedDiscToMove != null) // First Tower Selection
                 {
                     uiManager.ShowDiscIndicator(true, chosenTowerName);
                     obtainedDiscSize = GetDiscSize(chosenTowerName, obtainedDiscToMove); // Gets the size of chosen disc to move
@@ -90,7 +89,7 @@ public class DiscMover : MonoBehaviour
                 }
 
                 if(moveFromTowerIndex != ""
-                    && moveFromTowerIndex != chosenTowerName)
+                    && moveFromTowerIndex != chosenTowerName) // Second Tower Selection
                 {
                     Transform topDiscFromDestTower = GetTopDiscFromTower(chosenTowerName);
                     if(topDiscFromDestTower == null) // When Destination Tower is Empty
@@ -113,7 +112,7 @@ public class DiscMover : MonoBehaviour
                         OrganizeTowers();
                         return;
                     }
-                    else if(obtainedDiscSize > GetDiscSize(chosenTowerName, topDiscFromDestTower))
+                    else if(obtainedDiscSize > GetDiscSize(chosenTowerName, topDiscFromDestTower)) // When second tower chosen contains bigger disc size prompt "wrong move"
                     {
                         moveFromTowerIndex = "";
                         uiManager.ShowDiscIndicator(false,"");
@@ -127,7 +126,7 @@ public class DiscMover : MonoBehaviour
 
     int index = 0;
    
-    private void MoveDisc(Transform thisDisc)
+    private void MoveDisc(Transform thisDisc) // Handles Disc movement from tower to tower
     {
 
         thisDisc.position = Vector3.MoveTowards(thisDisc.position,
@@ -146,12 +145,11 @@ public class DiscMover : MonoBehaviour
                 if(!undoManager.isUndoing)
                 {
                     string movesEncodeToStr = discToMove.name +","+moveFromTowerIndex + "," + moveToTowerIndex;
-                    undoManager.AddThisMove(movesEncodeToStr);
+                    undoManager.AddThisMove(movesEncodeToStr); // Adds the player's move
                     gameManager.noOfMoves++;
                 }
                 else // When Undo is done add discs to respective towers
                 {
-
                     OrganizeTowers(); 
                 }
                 if(gameManager.isAutoModeOn)
@@ -181,13 +179,13 @@ public class DiscMover : MonoBehaviour
         }
     }
 
-    void GetNextAutoMove()
+    void GetNextAutoMove() // On Auto solve mode this will fetch next move
     {
         if (autoModeManager.currentAutoMoveIndex < autoModeManager.autoSolveSteps.Count)
             autoModeManager.FetchAutoModeMove(); // Fetches Next AutoMode move
     }
 
-    private void SetMoveTargetsTowerIndex()
+    private void SetMoveTargetsTowerIndex() 
     {
         if (moveFromTowerIndex == "Tower_A")
             moveTargetsTowerIndex[0] = 0;
@@ -204,7 +202,7 @@ public class DiscMover : MonoBehaviour
             moveTargetsTowerIndex[1] = 2;
     }
 
-    void OrganizeTowers()
+    void OrganizeTowers()// Handles the content of towers
     {
         if (moveFromTowerIndex == "Tower_A")
             gameManager.towerAContentOrganizer.RemoveThisDisc(discToMove);
@@ -244,7 +242,7 @@ public class DiscMover : MonoBehaviour
         return 0;
     }
 
-    public void ClearTempData()
+    public void ClearTempData() // To clear temp data of this class
     {
         moveFromTowerIndex = "";
         moveToTowerIndex = "";
@@ -252,7 +250,7 @@ public class DiscMover : MonoBehaviour
     }
 
 
-    public void UndoTheMove(string undoEncodedMove)
+    public void UndoTheMove(string undoEncodedMove) // When Undo button is clicked this handles the undo action
     {
         string[] decodedUndoMove = undoEncodedMove.Split(',');
 
@@ -262,15 +260,11 @@ public class DiscMover : MonoBehaviour
         Rigidbody discToMoveRigidBody = discToMove.GetComponent<Rigidbody>();
         discToMoveRigidBody.isKinematic = true;
         discToMoveRigidBody.useGravity = false;
-        //index = 0;
-        //SetMoveTargetsTowerIndex();
         canMove = true;
-        //MoveDisc(GameObject.Find(decodedUndoMove[0]).transform);
     }
 
-    public void ExecuteThisAutoModeMove(string obtainedAutoModeMove)
+    public void ExecuteThisAutoModeMove(string obtainedAutoModeMove) // this handles the auto moves
     {
-        //print(obtainedAutoModeMove);
         string[] decodedMove = obtainedAutoModeMove.Split(',');
         moveFromTowerIndex = decodedMove[0];
         moveToTowerIndex = decodedMove[1];

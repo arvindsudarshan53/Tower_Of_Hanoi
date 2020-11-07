@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour // Handles Game setup
 {
     public static GameManager instance;
 
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         CheckForAutoModeAndExecute();
     }
 
-    public bool CheckForWin()
+    public bool CheckForWin() // When all discs are moved to Tower C
     {
         if (towerCContentOrganizer.thisTowerDiscs.Count == chosenNoOfDiscs)
             return true;
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
         uiManager.ShowDiscIndicator(false, "");
     }
 
-    void ClearAllProgress()
+    void ClearAllProgress() // General data clearance to delete all temp variables stored
     {
         towerAContentOrganizer.ClearTempData();
         towerBContentOrganizer.ClearTempData();
@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
         DiscMover.instance.ClearTempData();
     }
 
-    void SetupDiscs()
+    void SetupDiscs() // Shows only chosen number of discs
     {
         for(int currentIndex = 0; currentIndex < discGameObjs.Length; currentIndex++)
         {
@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
             {
                 discGameObjs[currentIndex].SetActive(true);
                 discGameObjs[currentIndex].GetComponent<DiscProps>().sizeDispText.text = (chosenNoOfDiscs-(currentIndex)).ToString(); // to display size
-                towerAContentOrganizer.AddThisDisc(discGameObjs[currentIndex].transform);
+                towerAContentOrganizer.AddThisDisc(discGameObjs[currentIndex].transform); // Adds the disc as a content of Tower A
 
             }
             else
@@ -121,12 +121,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void ClampChosenNoOfDiscs()
+    void ClampChosenNoOfDiscs() // To maintain No Of Disc 1 << N << 7
     {
         chosenNoOfDiscs = Mathf.Clamp(chosenNoOfDiscs, 1, 7);
     }
 
-    void SetInitPositionsOfDiscs()
+    void SetInitPositionsOfDiscs() // To Reset All Discs at initial position on Restart/Start
     {
         foreach(GameObject g in discGameObjs)
         {
@@ -138,6 +138,6 @@ public class GameManager : MonoBehaviour
 
     void GetBestMoveCount()
     {
-        bestMovesCount = (int)(Mathf.Pow(2, chosenNoOfDiscs)) - 1;
+        bestMovesCount = (int)(Mathf.Pow(2, chosenNoOfDiscs)) - 1;  // Formula 2 to the power of N (No of discs) - 1
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerContentOrganizer : MonoBehaviour
+public class TowerContentOrganizer : MonoBehaviour // For storing and maintaining contents of Tower
 {
 
     public List<Transform> thisTowerDiscs;

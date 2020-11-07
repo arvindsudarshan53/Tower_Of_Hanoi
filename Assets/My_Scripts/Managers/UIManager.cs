@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIManager : MonoBehaviour
+public class UIManager : MonoBehaviour // Handles all the UI 
 {
 
     public static UIManager instance;
@@ -47,7 +47,7 @@ public class UIManager : MonoBehaviour
         DisplayNoOfMoves();
     }
 
-    public void ShowDiscIndicator(bool canShow, string towerName)
+    public void ShowDiscIndicator(bool canShow, string towerName) // indicates player's selection
     {
         discIndicator.gameObject.SetActive(canShow);
         if (towerName == "Tower_A")

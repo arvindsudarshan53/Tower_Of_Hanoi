@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoModeManager : MonoBehaviour
+public class AutoModeManager : MonoBehaviour // Handles Auto Mode
 {
 
     public static AutoModeManager instance;
